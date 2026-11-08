@@ -85,7 +85,8 @@ LifeBoatAPI.Tools.Builder = {
     local finalText, newSize = minimizer:minimize(combinedText, params.boilerPlate)
     LifeBoatAPI.Tools.FileSystemUtils.writeAllText(outFile, finalText)
 
-    print(name .. " minimized to: " .. tostring(newSize) .. " (" .. tostring(#finalText) .. " with comment) chars")
+    print(name .. " original combined size: " .. tostring(#combinedText) .. " chars")
+    print("Succesfully minimized to: " .. tostring(newSize) .. " (" .. tostring(#finalText) .. " with comment) chars, saving " .. tostring(#combinedText-#finalText) .. "chars in total")
 
     return originalText, combinedText, finalText, outFile
   end,
