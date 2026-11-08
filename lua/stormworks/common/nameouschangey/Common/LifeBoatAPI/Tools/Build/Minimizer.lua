@@ -31,6 +31,7 @@ TOTAL_CHAR_LIMIT = 8100 -- Giving some wiggle room just like nameouschangey says
 ---@field skipCombinedFileOutput  boolean if true, doesn't output the combined file - to speed up the build process
 ---@field stripOnDebugDraw      boolean if true, removes any user-defined onDebugDraw() function from compiled output
 ---@field stripOnAttatch      boolean if true, removes any user-defined onAttatch() function from compiled output
+---@field stripPrint         boolean if true, removes any user-defined print() function from compiled output
 
 ---@class Minimizer : BaseClass
 ---@field constants ParsingConstantsLoader list of external, global keywords
@@ -58,6 +59,7 @@ LifeBoatAPI.Tools.Minimizer = {
     this.params.skipCombinedFileOutput = LifeBoatAPI.Tools.DefaultBool(this.params.skipCombinedFileOutput, false)
     this.params.stripOnDebugDraw = LifeBoatAPI.Tools.DefaultBool(this.params.stripOnDebugDraw, true)
     this.params.stripOnAttatch = LifeBoatAPI.Tools.DefaultBool(this.params.stripOnAttatch, true)
+    this.params.stripPrint = LifeBoatAPI.Tools.DefaultBool(this.params.stripPrint, true)
 
     return this
   end,
@@ -118,6 +120,11 @@ LifeBoatAPI.Tools.Minimizer = {
       -- strip user onDebugDraw() implementations entirely if requested
       if this.params.stripOnDebugDraw then
         text = this:_stripFunctionByName(text, "onDebugDraw")
+      end
+
+      -- strip user print() implementations entirely if requested
+      if this.params.stripPrint then
+        text = this:_stripFunctionByName(text, "print")
       end
 
       -- strip user onAttatch() implementations entirely if requested
