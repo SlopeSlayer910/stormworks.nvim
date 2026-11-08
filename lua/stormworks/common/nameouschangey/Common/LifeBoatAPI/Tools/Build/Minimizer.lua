@@ -124,6 +124,7 @@ LifeBoatAPI.Tools.Minimizer = {
 
       -- strip user print() implementations entirely if requested
       if this.params.stripPrint then
+        print("Stripping Prints")
         text = this:_stripFunctionByName(text, "print")
       end
 
