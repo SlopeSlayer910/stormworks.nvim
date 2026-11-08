@@ -122,6 +122,7 @@ LifeBoatAPI.Tools.Minimizer = {
         text = this:_stripFunctionByName(text, "onDebugDraw")
       end
 
+      --[[
       -- strip user print() implementations entirely if requested
       if this.params.stripPrint then
         print("Stripping Prints")
@@ -129,6 +130,7 @@ LifeBoatAPI.Tools.Minimizer = {
       else
         print("Not stripping prints")
       end
+      ]]
 
       -- strip user onAttatch() implementations entirely if requested
       if this.params.stripOnAttatch then
