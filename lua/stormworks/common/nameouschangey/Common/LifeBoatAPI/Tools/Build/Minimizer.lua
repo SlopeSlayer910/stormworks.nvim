@@ -126,6 +126,8 @@ LifeBoatAPI.Tools.Minimizer = {
       if this.params.stripPrint then
         print("Stripping Prints")
         text = this:_stripFunctionByName(text, "print")
+      else
+        print("Not stripping prints")
       end
 
       -- strip user onAttatch() implementations entirely if requested
