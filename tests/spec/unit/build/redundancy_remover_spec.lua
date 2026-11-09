@@ -91,4 +91,105 @@ end
       TestUtils.assert_not_contains(output, "---@section")
     end)
   end)
+
+  it("should keep used nested sections in used root sections and the used root sections", function()
+    local remover = remover_class:new()
+    local input = [[
+---@section UsedNestedHelperRoot
+local function UsedNestedHelperRoot()
+  local stringToReturn = ""
+  ---@section UsedNestedHelperInUsedRoot
+  function UsedNestedHelperInUsedRoot()
+    return "UsedNestedHelperInUsedRoot"
+  end
+  ---@endsection
+  
+  stringToReturn = stringToReturn .. UsedNestedHelperInUsedRoot()
+  
+  ---@section UnusedNestedHelperInUsedRoot
+  function UnusedNestedHelperInUsedRoot()
+    return "UnusedNestedHelperInUsedRoot"
+  end
+  ---@endsection
+
+  return stringToReturn
+end
+---@endsection
+
+function onTick()
+  UsedNestedHelperRoot()
+end
+]]
+
+    local output = remover:removeRedundantCode(input)
+
+    TestUtils.assert_contains(output, "UsedNestedHelperRoot")
+    TestUtils.assert_contains(output, "UsedNestedHelperInUsedRoot")
+  end)
+
+  it("should remove unused nested sections in used root sections", function()
+    local remover = remover_class:new()
+    local input = [[
+---@section UsedNesterHelperRoot
+local function UsedNesterHelperRoot()
+  local stringToReturn = ""
+  
+  ---@section UsedNestedHelperInUsedRoot
+  function UsedNestedHelperInUsedRoot()
+    return "UsedNestedHelperInUsedRoot"
+  end
+  ---@endsection
+  
+  stringToReturn = stringToReturn .. UsedNestedHelperInUsedRoot()
+  
+  ---@section UnusedNestedHelperInUsedRoot
+  function UnusedNestedHelperInUsedRoot()
+    return "UnusedNestedHelperInUsedRoot"
+  end
+  ---@endsection
+
+  return stringToReturn
+end
+---@endsection
+
+function onTick()
+  UsedNestedHelperRoot()
+end
+]]
+
+    local output = remover:removeRedundantCode(input)
+
+    TestUtils.assert_not_contains(output, "UnusedNestedHelperInUsedRoot")
+  end)
+
+  it("should remove used nested sections in unused root sections and the unused root sections", function()
+    local remover = remover_class:new()
+    local input = [[
+---@section UnusedNesterHelperRoot
+local function UnusedNestedHelperRoot()
+  local stringToReturn = ""
+  ---@section UsedNesterHelperInUnusedRoot
+  function UsedNesterHelperInUnusedRoot()
+    return "UsedNesterHelperInUnusedRoot"
+  end
+  ---@endsection
+  
+  stringToReturn = stringToReturn .. UsedNesterHelperInUnusedRoot()
+  
+  ---@section UnusedNestedHelperInUnusedRoot
+  function UnusedNestedHelperInUnusedRoot()
+    return "UnusedNestedHelperInUnusedRoot"
+  end
+  ---@endsection
+
+  return stringToReturn
+end
+---@endsection
+]]
+
+    local output = remover:removeRedundantCode(input)
+
+    TestUtils.assert_not_contains(output, "UnusedNesterHelperRoot")
+    TestUtils.assert_not_contains(output, "UsedNesterHelperInUsedRoot")
+  end)
 end)
