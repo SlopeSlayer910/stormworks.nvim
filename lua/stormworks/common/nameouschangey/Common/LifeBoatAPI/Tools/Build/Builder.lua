@@ -88,7 +88,7 @@ LifeBoatAPI.Tools.Builder = {
 
     local endTime = os.clock()
 
-    print(name .. " minimized to: " .. tostring(newSize) .. " (" .. tostring(#finalText) .. " with comment) chars in:" + (endTime-startTime))
+    print(name .. " minimized to: " .. tostring(newSize) .. " (" .. tostring(#finalText) .. " with comment) chars in:" .. (endTime-startTime))
 
     return originalText, combinedText, finalText, outFile
   end,
