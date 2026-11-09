@@ -192,4 +192,51 @@ end
     TestUtils.assert_not_contains(output, "UnusedNesterHelperRoot")
     TestUtils.assert_not_contains(output, "UsedNesterHelperInUsedRoot")
   end)
+
+  it("should remove code that is used by an unused section", function()
+    local remover = remover_class:new()
+    local input = [[
+---@section UsedHelperB
+local function UsedHelperB()
+  return "UsedHelperB"
+end
+---@endsection
+
+---@section UsedCaller
+local function UsedCaller()
+  return "UsedCaller " .. UsedHelperB()
+end
+---@endsection
+
+function onTick()
+  UsedCaller()
+end
+]]
+
+    local output = remover:removeRedundantCode(input)
+    TestUtils.assert_contains(output, "UsedCaller")
+    TestUtils.assert_contains(output, "UsedHelperB")
+  end)
+
+    it("should keep code that is used through another caller", function()
+    local remover = remover_class:new()
+    local input = [[
+---@section UsedHelperA
+--Only used in the unused caller and should be removed with it
+local function UsedHelperA()
+  return "UsedHelperA"
+end
+---@endsection
+
+---@section UnusedCaller
+local function UnusedCaller()
+  return "UnusedCaller " .. UsedHelperB()
+end
+---@endsection
+]]
+
+    local output = remover:removeRedundantCode(input)
+    TestUtils.assert_not_contains(output, "UnusedCaller")
+    TestUtils.assert_not_contains(output, "UsedHelperA")
+  end)
 end)
