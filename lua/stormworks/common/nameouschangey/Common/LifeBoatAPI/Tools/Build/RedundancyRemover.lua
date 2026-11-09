@@ -150,7 +150,7 @@ LifeBoatAPI.Tools.RedundancyRemover = {
       if section:isRemovable(text) then
         text = section:stripFromText(text)
         stripCounter = stripCounter + 1
-        foundOn = foundOn ..runCounter..","
+        foundOn = foundOn ..runCounter..": "..section.identifier..","
         foundRemovable = true
       end
     end
