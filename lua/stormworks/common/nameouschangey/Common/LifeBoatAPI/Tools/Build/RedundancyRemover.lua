@@ -140,14 +140,21 @@ LifeBoatAPI.Tools.RedundancyRemover = {
     end)
 
     local foundRemovable = false
+    local runCounter = 0
+    local stripCounter = 0
     
     --loop through all those CodeSections and attempt to strip them
     for i, section in ipairs(sections) do
+      runCounter = runCounter + 1
       if section:isRemovable(text) then
         text = section:stripFromText(text)
+        stripCounter = stripCounter + 1
         foundRemovable = true
       end
     end
+
+    print("Runs: " .. runCounter .." found " .. stripCounter)
+
     return text, foundRemovable
   end,
 }
