@@ -85,7 +85,7 @@ LifeBoatAPI.Tools.CodeSection = {
     end
   end,
 
-  --Checks if the amount of calls to the identifier outisde the section tags is less than the instances required to include it
+  --Checks if the amount of calls to the identifier outside the section tags is less than the instances required to include it
   ---@param this CodeSection
   isRemovable = function(this, text)
     local textBefore, textAfter = this:_textOutsideSection(text)
@@ -147,6 +147,10 @@ LifeBoatAPI.Tools.RedundancyRemover = {
     --loop through all those CodeSections and attempt to strip them
     for i, section in ipairs(sections) do
       runCounter = runCounter + 1
+
+      --Seems to only match on the first section
+
+      print("Trying to remove section: " .. section.identifier .. "; Which spans: " ..section.startIndex .. " -> " .. section.endIndex)
       if section:isRemovable(text) then
         text = section:stripFromText(text)
         stripCounter = stripCounter + 1
