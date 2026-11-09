@@ -139,14 +139,16 @@ LifeBoatAPI.Tools.RedundancyRemover = {
       return LifeBoatAPI.Tools.CodeSection:new(v, text)
     end)
 
+    local foundRemovable = false
+    
     --loop through all those CodeSections and attempt to strip them
     for i, section in ipairs(sections) do
       if section:isRemovable(text) then
         text = section:stripFromText(text)
-        return text, true
+        foundRemovable = true
       end
     end
-    return text, false
+    return text, foundRemovable
   end,
 }
 LifeBoatAPI.Tools.Class(LifeBoatAPI.Tools.RedundancyRemover)
