@@ -151,7 +151,7 @@ LifeBoatAPI.Tools.RedundancyRemover = {
       local section = sections[i]
       print(section.identifier .. ": " .. section.startIndex .. " -> "..section.endIndex)
 
-      if section.startIndex > lastStartIndex then
+      if section.startIndex < lastStartIndex then
         print("Should be present")
 
         if section:isRemovable(text) then
