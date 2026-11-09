@@ -117,7 +117,9 @@ LifeBoatAPI.Tools.RedundancyRemover = {
   ---@param this RedundancyRemover
   removeRedundantCode = function(this, text)
     local reducedText, foundRemovable = text, false
+    local passes = 1
     repeat
+      print("\nStarting Removal Pass: " .. passes)
       reducedText, foundRemovable = this:attemptDeletionPass(reducedText)
     until not foundRemovable
 
@@ -125,7 +127,8 @@ LifeBoatAPI.Tools.RedundancyRemover = {
   end,
 
   --this is run until we can't find any more removable sections
-  -- we can only strip one each time, and then need to re-pass the entire file
+  -- we can only strip one pass each time, and then need to re-pass the entire file
+  -- the user should layout the code in such a way that no code is required by something above it's deleration for the fastest possible redundancy removal
   -- it's a slow process; but it's the only way to do this reasonable safely without a lot of thinking
   ---@param this RedundancyRemover
   ---@return string text the string that has been searched
@@ -170,6 +173,7 @@ LifeBoatAPI.Tools.RedundancyRemover = {
 
       print(reportingString)
     end
+
     return text, foundRemovable
   end,
 }
