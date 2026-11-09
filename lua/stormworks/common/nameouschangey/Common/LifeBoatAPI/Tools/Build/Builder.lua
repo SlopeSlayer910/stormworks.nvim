@@ -62,6 +62,7 @@ LifeBoatAPI.Tools.Builder = {
   ---@param name string
   ---@param entrypointFile Filepath
   _buildScript = function(self, name, entrypointFile, params, minimizerConstants)
+    local startTime = os.clock()
     if self.filter then
       -- check if we're filtering out the file
       if not name:match(self.filter) then
@@ -85,7 +86,9 @@ LifeBoatAPI.Tools.Builder = {
     local finalText, newSize = minimizer:minimize(combinedText, params.boilerPlate)
     LifeBoatAPI.Tools.FileSystemUtils.writeAllText(outFile, finalText)
 
-    print(name .. " minimized to: " .. tostring(newSize) .. " (" .. tostring(#finalText) .. " with comment) chars")
+    local endTime = os.clock()
+
+    print(name .. " minimized to: " .. tostring(newSize) .. " (" .. tostring(#finalText) .. " with comment) chars in:" + (endTime-startTime))
 
     return originalText, combinedText, finalText, outFile
   end,
