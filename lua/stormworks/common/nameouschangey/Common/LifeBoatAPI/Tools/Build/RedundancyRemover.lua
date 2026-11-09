@@ -85,6 +85,7 @@ LifeBoatAPI.Tools.CodeSection = {
     end
   end,
 
+  --Checks if the amount of calls to the identifier outside the section tags is less than the instances required to include it
   ---@param this CodeSection
   isRemovable = function(this, text)
     local textBefore, textAfter = this:_textOutsideSection(text)
@@ -94,6 +95,7 @@ LifeBoatAPI.Tools.CodeSection = {
     return countBefore + countAfter < this.instances
   end,
 
+  --Joins the parts of the text before and after the section, ommitting the section
   ---@param this CodeSection
   stripFromText = function(this, text)
     local textBefore, textAfter = this:_textOutsideSection(text)
@@ -122,23 +124,32 @@ LifeBoatAPI.Tools.RedundancyRemover = {
     return reducedText
   end,
 
+  --this is run until we can't find any more removable sections
   -- we can only strip one each time, and then need to re-pass the entire file
   -- it's a slow process; but it's the only way to do this reasonable safely without a lot of thinking
   ---@param this RedundancyRemover
+  ---@return string text the string that has been searched
+  ---@return boolean foundRemovable did we find any removable sections
   attemptDeletionPass = function(this, text)
     ---@type CodeSection[]
     local sections = LifeBoatAPI.Tools.StringUtils.find(text, "%-%-%-@section%s-([^\n]+)\n")
+
+    --mustate the table of results to a table of CodeSections
     sections = LifeBoatAPI.Tools.TableUtils.iselect(sections, function(v)
       return LifeBoatAPI.Tools.CodeSection:new(v, text)
     end)
 
-    for i, section in ipairs(sections) do
+    local foundRemovable = false
+    
+    --loop through all those CodeSections from the bottom up and attempt to strip them (bottom up means that a single pass can strip more)
+    for i=#sections, 1, -1 do
+      local section = sections[i]
       if section:isRemovable(text) then
         text = section:stripFromText(text)
-        return text, true
+        foundRemovable = true
       end
     end
-    return text, false
+    return text, foundRemovable
   end,
 }
 LifeBoatAPI.Tools.Class(LifeBoatAPI.Tools.RedundancyRemover)
