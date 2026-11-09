@@ -146,7 +146,7 @@ LifeBoatAPI.Tools.RedundancyRemover = {
     
     --loop through all those CodeSections and attempt to strip them
     for i=#sections, 1, -1 do
-      section = sections[i]
+      local section = sections[i]
       runCounter = runCounter + 1
 
       --Seems to only match on the first section
