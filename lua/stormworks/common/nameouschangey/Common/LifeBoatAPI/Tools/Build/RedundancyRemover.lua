@@ -132,11 +132,36 @@ LifeBoatAPI.Tools.RedundancyRemover = {
       return LifeBoatAPI.Tools.CodeSection:new(v, text)
     end)
 
-    for i, section in ipairs(sections) do
-      if section:isRemovable(text) then
-        text = section:stripFromText(text)
-        return text, true
+    sections = LifeBoatAPI.Tools.TableUtils.iorderBy(sections, function(a, b)
+      return a.endIndex > b.endIndex
+    end)
+
+    local lastStartIndex = math.huge
+    local foundRemovable = false
+    local reportingString = ""
+    
+    --loop through all those CodeSections from the bottom up and attempt to strip them (bottom up means that a single pass can strip more)
+    for i= 1, #sections, 1 do
+      local section = sections[i]
+      reportingString = section.identifier .. ": " .. section.startIndex .. " -> "..section.endIndex
+
+      if section.startIndex < lastStartIndex then
+        reportingString = reportingString .. " should be present"
+
+        if section:isRemovable(text) then
+          reportingString = reportingString .. " and is removable"
+          text = section:stripFromText(text)
+          lastStartIndex = section.startIndex
+          foundRemovable = true
+        else
+          reportingString = reportingString .. " and is not removable"
+        end
+      else
+        --if the startIndex is not after the lastStart index then the section has been removed and should not be checked
+        reportingString = reportingString .. " should already be gone"
       end
+
+      print(reportingString)
     end
     return text, false
   end,
