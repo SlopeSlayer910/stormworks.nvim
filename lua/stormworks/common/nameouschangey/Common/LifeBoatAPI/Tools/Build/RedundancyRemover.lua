@@ -121,6 +121,7 @@ LifeBoatAPI.Tools.RedundancyRemover = {
     repeat
       print("\nStarting Removal Pass: " .. passes)
       reducedText, foundRemovable = this:attemptDeletionPass(reducedText)
+      passes = passes + 1
     until not foundRemovable
 
     return reducedText
