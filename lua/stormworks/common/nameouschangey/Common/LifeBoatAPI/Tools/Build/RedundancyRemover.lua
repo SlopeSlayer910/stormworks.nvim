@@ -140,6 +140,7 @@ LifeBoatAPI.Tools.RedundancyRemover = {
     end)
 
     local foundRemovable = false
+    local foundOn = ""
     local runCounter = 0
     local stripCounter = 0
     
@@ -149,6 +150,7 @@ LifeBoatAPI.Tools.RedundancyRemover = {
       if section:isRemovable(text) then
         text = section:stripFromText(text)
         stripCounter = stripCounter + 1
+        foundOn = foundOn ..runCounter..","
         foundRemovable = true
       end
     end
