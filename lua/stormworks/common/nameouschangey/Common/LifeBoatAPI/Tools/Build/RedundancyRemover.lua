@@ -155,7 +155,7 @@ LifeBoatAPI.Tools.RedundancyRemover = {
       end
     end
 
-    print("Runs: " .. runCounter .." found " .. stripCounter)
+    print("Runs: " .. runCounter .." found " .. stripCounter .. " on: " .. foundOn)
 
     return text, foundRemovable
   end,
