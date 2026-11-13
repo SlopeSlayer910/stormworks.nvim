@@ -1,3 +1,8 @@
+# SlopeSlayer910's Bleeding Edge Branch
+This is a custom maintained branch with the goal of implementing and testing a mixture of improvements, fixes and possible features. It is not by any means guaranteed to be a stable branch and may contain breaking changes or bugs. Use it at your own risk.
+
+## TL;DR: Using this branch may result in pain, keep backups and report issues
+
 # stormworks.nvim
 
 A Neovim plugin that streamlines Stormworks microcontroller and addon script development. It bundles helpers and build tooling inspired by the excellent Stormworks VSCode ecosystem, adds a convenient LÖVE2D-based UI runner, and integrates with lua-language-server for a smooth editing experience.
